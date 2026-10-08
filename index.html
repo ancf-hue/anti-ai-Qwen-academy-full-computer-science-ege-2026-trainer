@@ -1,0 +1,1879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anti-AI Qwen Academy | Full Computer Science EGE-2026 Trainer</title>
+  <meta name="description" content="Full autonomous computer science trainer in EGE 2026 format: 27 tasks, all data included in conditions, verified answers and explanations." />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --bg: #070b18; --card: rgba(18, 26, 51, 0.72); --card-soft: rgba(255, 255, 255, 0.05);
+      --border: rgba(255, 255, 255, 0.1); --text: #e8ecff; --muted: #9aa4c8;
+      --accent: #22d3ee; --violet: #7c3aed; --green: #22c55e; --red: #ef4444; --orange: #f59e0b;
+    }
+    body {
+      margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background: radial-gradient(circle at top left, rgba(124, 58, 237, 0.22), transparent 30%),
+                  radial-gradient(circle at top right, rgba(34, 211, 238, 0.18), transparent 28%), var(--bg);
+      color: var(--text); line-height: 1.55; min-height: 100vh;
+    }
+    .container { width: min(1120px, 92%); margin: 0 auto; }
+    header {
+      position: sticky; top: 0; z-index: 50; backdrop-filter: blur(14px);
+      background: rgba(7, 11, 24, 0.82); border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; flex-wrap: wrap; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-logo {
+      width: 46px; height: 46px; border-radius: 15px; object-fit: cover;
+      background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 12px 30px rgba(34, 211, 238, 0.18); flex: 0 0 auto;
+    }
+    .brand strong { display: block; font-size: 16px; line-height: 1.2; }
+    .brand small { color: var(--muted); font-size: 12px; }
+    
+    /* Navigation */
+    nav { display: flex; gap: 18px; flex-wrap: wrap; }
+    nav a { color: #cfd6ff; text-decoration: none; font-weight: 700; font-size: 14px; transition: color 0.2s; }
+    nav a:hover { color: white; }
+
+    /* Top Controls: Lang & Timer */
+    .top-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
+    .lang-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 850;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+    .lang-btn:hover { background: rgba(255, 255, 255, 0.12); }
+    .lang-option { opacity: 0.65; }
+    .lang-option.active { opacity: 1; color: white; }
+    .lang-sep { opacity: 0.45; }
+
+    .timer-widget {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 6px 8px;
+    }
+    .timer-widget select {
+      background: rgba(7, 11, 24, 0.55);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 6px 8px;
+      font: inherit;
+      font-size: 12px;
+      max-width: 160px;
+    }
+    #timerDisplay {
+      font-family: monospace;
+      font-variant-numeric: tabular-nums;
+      font-weight: 900;
+      min-width: 88px;
+      text-align: center;
+      color: white;
+      font-size: 14px;
+    }
+    .timer-btn {
+      border: 0;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 6px 9px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.15s ease;
+    }
+    .timer-btn:hover { background: rgba(255, 255, 255, 0.14); }
+    .timer-widget.warning #timerDisplay { color: var(--orange); }
+    .timer-widget.danger #timerDisplay {
+      color: var(--red);
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.55; }
+    }
+
+    .hero { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 24px; padding: 48px 0 28px; align-items: start; }
+    .badge {
+      display: inline-flex; align-items: center; padding: 8px 12px; border-radius: 999px;
+      background: rgba(124, 58, 237, 0.18); border: 1px solid rgba(124, 58, 237, 0.35);
+      color: #d8ccff; font-size: 13px; font-weight: 700;
+    }
+    h1 { font-size: clamp(34px, 5vw, 58px); line-height: 1.05; margin: 16px 0; }
+    h1 .accent { color: var(--accent); }
+    .lead { color: #b8c1e6; max-width: 72ch; font-size: 17px; }
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+    .btn {
+      border: 0; border-radius: 14px; padding: 14px 18px; font-weight: 850; cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      background: linear-gradient(135deg, var(--violet), var(--accent)); color: white;
+      box-shadow: 0 12px 30px rgba(34, 211, 238, 0.18); font-size: 15px;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn.secondary { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.14); color: #eaf0ff; box-shadow: none; }
+    .btn.small { padding: 10px 14px; font-size: 14px; border-radius: 12px; }
+    .panel {
+      background: linear-gradient(180deg, rgba(124, 58, 237, 0.16), rgba(6, 182, 212, 0.10));
+      border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 24px; padding: 22px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    }
+    .panel h3 { margin: 0 0 14px; font-size: 20px; }
+    .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0; }
+    .metric {
+      background: rgba(7, 11, 24, 0.35); border-radius: 16px; padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08); min-height: 82px;
+    }
+    .metric strong { display: block; font-size: 22px; color: white; margin-bottom: 4px; }
+    .metric span { color: var(--muted); font-size: 12px; }
+    progress {
+      width: 100%; height: 10px; border-radius: 999px; overflow: hidden; appearance: none;
+      background: rgba(255, 255, 255, 0.1); border: none; margin-top: 10px;
+    }
+    progress::-webkit-progress-bar { background: rgba(255, 255, 255, 0.1); border-radius: 999px; }
+    progress::-webkit-progress-value { background: linear-gradient(90deg, var(--violet), var(--accent)); border-radius: 999px; }
+    progress::-moz-progress-bar { background: var(--accent); border-radius: 999px; }
+    .note { color: var(--muted); font-size: 13px; margin-top: 12px; }
+    section { padding: 28px 0; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
+    h2 { font-size: clamp(26px, 3vw, 36px); margin: 0; line-height: 1.15; }
+    .sub { color: var(--muted); margin: 6px 0 0; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(245px, 1fr)); gap: 16px; }
+    .card {
+      background: var(--card); border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 22px; padding: 20px; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+    }
+    .card h3 { margin: 0 0 10px; font-size: 20px; }
+    .card p { color: #b8c1e6; margin: 0 0 16px; }
+    .warn-card { border-color: rgba(245, 158, 11, 0.35); background: linear-gradient(180deg, rgba(245, 158, 11, 0.10), rgba(18, 26, 51, 0.72)); }
+    .danger-card { border-color: rgba(239, 68, 68, 0.35); background: linear-gradient(180deg, rgba(239, 68, 68, 0.10), rgba(18, 26, 51, 0.72)); }
+    .success-card { border-color: rgba(34, 197, 94, 0.35); background: linear-gradient(180deg, rgba(34, 197, 94, 0.10), rgba(18, 26, 51, 0.72)); }
+    .tag {
+      display: inline-block; padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 850;
+      margin-bottom: 10px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.12); color: #dbe3ff;
+    }
+    .tag.red { background: rgba(239, 68, 68, 0.14); border-color: rgba(239, 68, 68, 0.35); color: #ffd7d7; }
+    .tag.green { background: rgba(34, 197, 94, 0.14); border-color: rgba(34, 197, 94, 0.35); color: #d7ffe6; }
+    .tag.orange { background: rgba(245, 158, 11, 0.14); border-color: rgba(245, 158, 11, 0.35); color: #fff0cc; }
+    .tag.blue { background: rgba(34, 211, 238, 0.14); border-color: rgba(34, 211, 238, 0.35); color: #d7f5ff; }
+    .mini-list { margin: 0; padding-left: 18px; color: #c8d2f5; }
+    .mini-list li { margin: 7px 0; }
+    .filter-bar {
+      display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; padding: 14px;
+      background: var(--card-soft); border: 1px solid var(--border); border-radius: 16px; align-items: center;
+    }
+    .filter-bar span { color: var(--muted); font-size: 13px; font-weight: 700; margin-right: 6px; }
+    .filter-btn {
+      padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.06); color: var(--text); cursor: pointer; font-size: 13px; font-weight: 700; transition: 0.15s ease;
+    }
+    .filter-btn:hover { background: rgba(255, 255, 255, 0.1); }
+    .filter-btn.active { background: linear-gradient(135deg, var(--violet), var(--accent)); border-color: transparent; color: white; }
+    .question-block {
+      background: var(--card); border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 24px; padding: 24px; margin-bottom: 26px; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+    }
+    .q-number {
+      display: inline-block; padding: 6px 12px; border-radius: 999px;
+      background: rgba(124, 58, 237, 0.22); border: 1px solid rgba(124, 58, 237, 0.45);
+      color: #d8ccff; font-size: 13px; font-weight: 850; margin-bottom: 14px;
+    }
+    .q-number.theory { background: rgba(34, 197, 94, 0.18); border-color: rgba(34, 197, 94, 0.45); color: #d7ffe6; }
+    .q-number.algo { background: rgba(245, 158, 11, 0.18); border-color: rgba(245, 158, 11, 0.45); color: #fff0cc; }
+    .q-number.prog { background: rgba(34, 211, 238, 0.18); border-color: rgba(34, 211, 238, 0.45); color: #d7f5ff; }
+    .q-number.data { background: rgba(239, 68, 68, 0.18); border-color: rgba(239, 68, 68, 0.45); color: #ffd7d7; }
+    .q-part { margin-bottom: 18px; }
+    .q-part-label { display: inline-block; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent); margin-bottom: 8px; }
+    .q-text { font-size: 17px; font-weight: 700; margin: 0; line-height: 1.5; color: #eaf0ff; white-space: pre-wrap; }
+    .q-info {
+      background: rgba(124, 58, 237, 0.10); border-left: 4px solid var(--violet);
+      border-radius: 0 14px 14px 0; padding: 16px 18px; margin: 18px 0; color: #dbe3ff; font-size: 15px; line-height: 1.55; white-space: pre-wrap;
+    }
+    .q-info strong { color: #ffffff; }
+    .q-trainer-label { display: inline-block; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; color: var(--green); margin-bottom: 10px; }
+    .options { display: grid; gap: 10px; }
+    .option {
+      text-align: left; width: 100%; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text); border-radius: 14px; padding: 14px 16px; cursor: pointer; font-size: 15px; transition: 0.15s ease; white-space: pre-wrap;
+    }
+    .option:hover:not(:disabled) { background: rgba(255, 255, 255, 0.1); }
+    .option.correct { background: rgba(34, 197, 94, 0.18); border-color: rgba(34, 197, 94, 0.55); }
+    .option.wrong { background: rgba(239, 68, 68, 0.18); border-color: rgba(239, 68, 68, 0.55); }
+    .option:disabled { cursor: default; }
+    .result-block { margin-top: 14px; padding: 14px 16px; border-radius: 14px; }
+    .result-block.correct { background: rgba(34, 197, 94, 0.12); border: 1px solid rgba(34, 197, 94, 0.35); }
+    .result-block.wrong { background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); }
+    .verdict { font-size: 17px; font-weight: 900; margin-bottom: 8px; }
+    .verdict.correct { color: #22c55e; }
+    .verdict.wrong { color: #ef4444; }
+    .result-row { margin: 6px 0; color: #d7e6ff; font-size: 15px; }
+    .result-row strong { color: #ffffff; }
+    .source-row { margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(255, 255, 255, 0.18); color: var(--muted); font-size: 13px; }
+    .source-row strong { color: #dbe3ff; }
+    .summary {
+      background: linear-gradient(180deg, rgba(34, 197, 94, 0.14), rgba(18, 26, 51, 0.72));
+      border: 1px solid rgba(34, 197, 94, 0.4); border-radius: 24px; padding: 24px; text-align: center; margin-top: 24px;
+    }
+    .summary .score { font-size: 48px; font-weight: 950; color: #fff; }
+    .reset-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; justify-content: flex-end; }
+    .checklist { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+    .check-item {
+      display: flex; gap: 12px; align-items: flex-start; background: var(--card-soft);
+      border: 1px solid var(--border); border-radius: 16px; padding: 14px; transition: 0.15s ease;
+    }
+    .check-item input { width: 20px; height: 20px; margin-top: 3px; accent-color: var(--accent); flex: 0 0 auto; }
+    .check-item label { cursor: pointer; color: #dbe3ff; }
+    .check-item.done { opacity: 0.72; background: rgba(34, 211, 238, 0.08); border-color: rgba(34, 211, 238, 0.25); }
+    .check-item.done label { text-decoration: line-through; color: #aab5dc; }
+    .plan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .day { background: var(--card-soft); border: 1px solid var(--border); border-radius: 18px; padding: 16px; min-height: 112px; }
+    .day b { display: block; color: var(--accent); margin-bottom: 6px; font-size: 14px; letter-spacing: 0.2px; }
+    .day.critical { border-color: rgba(239, 68, 68, 0.35); background: rgba(239, 68, 68, 0.08); }
+    .support-card {
+      background: linear-gradient(180deg, rgba(124, 58, 237, 0.18), rgba(34, 211, 238, 0.10));
+      border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 24px; padding: 24px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    }
+    .support-card h2 { margin-bottom: 10px; }
+    .support-card p { margin: 10px 0; color: #dbe3ff; }
+    .phone { color: white; font-weight: 900; text-decoration: none; border-bottom: 1px dashed rgba(255, 255, 255, 0.45); }
+    .phone:hover { color: var(--accent); }
+    .copy-status { margin-left: 8px; color: var(--green); font-weight: 850; }
+    .support-card a { color: var(--accent); font-weight: 800; text-decoration: none; }
+    .support-card a:hover { text-decoration: underline; }
+    footer { padding: 30px 0 50px; color: var(--muted); text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.08); margin-top: 30px; }
+    .code-block {
+      background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px; font-family: 'Courier New', monospace; font-size: 13px; color: #a5f3fc;
+      overflow-x: auto; white-space: pre; margin: 10px 0;
+    }
+    @media (max-width: 860px) {
+      .hero { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: 1fr; }
+      nav { gap: 12px; }
+      .top-controls { width: 100%; justify-content: space-between; }
+      .timer-widget select { max-width: 120px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container topbar">
+      <div class="brand">
+        <img src="favicon.ico" class="brand-logo" alt="Logo" onerror="this.style.display='none'" />
+        <div>
+          <strong data-i18n="brandTitle">Anti-AI Qwen Academy</strong>
+          <small data-i18n="brandSub">Full EGE-2026 Trainer</small>
+        </div>
+      </div>
+      
+      <nav>
+        <a href="#structure" data-i18n="navStructure">Structure</a>
+        <a href="#trainer" data-i18n="navTrainer">Trainer</a>
+        <a href="#checklist" data-i18n="navChecklist">Checklist</a>
+        <a href="#plan" data-i18n="navPlan">25 Days</a>
+        <a href="#support" data-i18n="navSupport">Support</a>
+      </nav>
+
+      <div class="top-controls">
+        <button id="langToggle" class="lang-btn" type="button" aria-label="Switch Language">
+          <span class="lang-option" data-lang="ru">RU</span>
+          <span class="lang-sep">/</span>
+          <span class="lang-option active" data-lang="en">EN</span>
+        </button>
+
+        <div class="timer-widget" id="timerWidget" role="group" aria-label="Exam Timer">
+          <select id="timerPreset" aria-label="Timer Preset"></select>
+          <span id="timerDisplay">03:55:00</span>
+          <button id="timerToggle" class="timer-btn" type="button">▶</button>
+          <button id="timerReset" class="timer-btn" type="button">↺</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <span class="badge" data-i18n="badge">Full Format • 27 Tasks • CS EGE-2026</span>
+        <h1 data-i18n="h1">Full <span class="accent">Computer Science</span> Trainer in EGE Format</h1>
+        <p class="lead" data-i18n="lead">
+          27 short-answer tasks. All data is included directly in the conditions. No external files required.
+          Logic, algorithms, programming, databases, networks, game theory, data processing.
+        </p>
+        <p class="note" data-i18n="disclaimer">
+          Attention: This is an author's autonomous trainer in the EGE-2026 format.
+          The tasks are not exact copies of official FIPI variants.
+        </p>
+        <div class="actions">
+          <button class="btn" onclick="scrollToId('trainer')" data-i18n="actionTrainer">Take the trainer</button>
+          <button class="btn secondary" onclick="scrollToId('structure')" data-i18n="actionStructure">Exam Structure</button>
+        </div>
+      </div>
+      <aside class="panel">
+        <h3 data-i18n="quickStats">Quick Stats</h3>
+        <div class="metrics">
+          <div class="metric"><strong id="answeredCount">0/27</strong><span data-i18n="metricAnswered">tasks completed</span></div>
+          <div class="metric"><strong id="correctCount">0</strong><span data-i18n="metricCorrect">correct answers</span></div>
+          <div class="metric"><strong id="checklistProgress">0%</strong><span data-i18n="metricChecklist">checklist</span></div>
+        </div>
+        <progress id="overall" value="0" max="100"></progress>
+        <p class="note" data-i18n="noteReset">Progress is not saved: everything starts from zero each time the page is opened.</p>
+      </aside>
+    </section>
+
+    <section id="structure">
+      <div class="section-head">
+        <div>
+          <h2 data-i18n="structureTitle">Trainer Structure</h2>
+          <p class="sub" data-i18n="structureSub">27 tasks. Time — 3 hours 55 minutes.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <article class="card success-card">
+          <span class="tag green" data-i18n="cardTheoryTag">Theory</span>
+          <h3 data-i18n="cardTheoryTitle">Tasks 1, 2, 4, 7, 11, 13</h3>
+          <ul class="mini-list">
+            <li data-i18n="cardT1">1 — graphs and roads</li>
+            <li data-i18n="cardT2">2 — truth tables</li>
+            <li data-i18n="cardT4">4 — Fano code</li>
+            <li data-i18n="cardT7">7 — sound encoding</li>
+            <li data-i18n="cardT11">11 — memory volume</li>
+            <li data-i18n="cardT13">13 — IP addresses</li>
+          </ul>
+        </article>
+        <article class="card warn-card">
+          <span class="tag orange" data-i18n="cardAlgoTag">Algorithms</span>
+          <h3 data-i18n="cardAlgoTitle">Tasks 5, 6, 8, 12, 16, 22, 23</h3>
+          <ul class="mini-list">
+            <li data-i18n="cardA5">5 — binary record algorithms</li>
+            <li data-i18n="cardA6">6 — Turtle executor</li>
+            <li data-i18n="cardA8">8 — combinatorics</li>
+            <li data-i18n="cardA12">12 — Turing machine</li>
+            <li data-i18n="cardA16">16 — recursive algorithms</li>
+            <li data-i18n="cardA22">22 — parallel processes</li>
+            <li data-i18n="cardA23">23 — executor programs</li>
+          </ul>
+        </article>
+        <article class="card danger-card">
+          <span class="tag red" data-i18n="cardProgTag">Programming</span>
+          <h3 data-i18n="cardProgTitle">Tasks 14, 15, 17, 24, 25</h3>
+          <ul class="mini-list">
+            <li data-i18n="cardP14">14 — number systems</li>
+            <li data-i18n="cardP15">15 — segments on a line</li>
+            <li data-i18n="cardP17">17 — sequence processing</li>
+            <li data-i18n="cardP24">24 — text processing</li>
+            <li data-i18n="cardP25">25 — number masks</li>
+          </ul>
+        </article>
+        <article class="card">
+          <span class="tag blue" data-i18n="cardDataTag">Data and Games</span>
+          <h3 data-i18n="cardDataTitle">Tasks 3, 9, 10, 18, 19–21, 26, 27</h3>
+          <ul class="mini-list">
+            <li data-i18n="cardD3">3 — databases</li>
+            <li data-i18n="cardD9_10">9, 10 — tables and search</li>
+            <li data-i18n="cardD18">18 — robot in square</li>
+            <li data-i18n="cardD19_21">19–21 — game theory</li>
+            <li data-i18n="cardD26">26 — store data processing</li>
+            <li data-i18n="cardD27">27 — star clustering</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="trainer">
+      <div class="section-head">
+        <div>
+          <h2 data-i18n="trainerTitle">Full Trainer: 27 Tasks</h2>
+          <p class="sub" data-i18n="trainerSub">All conditions are self-contained. Progress is not saved.</p>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <span data-i18n="filterShow">Show:</span>
+        <button class="filter-btn active" data-filter="all" id="filterAll" onclick="setFilter('all', this)"></button>
+        <button class="filter-btn" data-filter="theory" id="filterTheory" onclick="setFilter('theory', this)"></button>
+        <button class="filter-btn" data-filter="algo" id="filterAlgo" onclick="setFilter('algo', this)"></button>
+        <button class="filter-btn" data-filter="prog" id="filterProg" onclick="setFilter('prog', this)"></button>
+        <button class="filter-btn" data-filter="data" id="filterData" onclick="setFilter('data', this)"></button>
+      </div>
+
+      <div class="reset-bar">
+        <button class="btn secondary small" onclick="resetAll()" data-i18n="resetAll">🗑 Reset all answers</button>
+      </div>
+
+      <div id="quizContainer"></div>
+      <div id="summaryBox"></div>
+    </section>
+
+    <section id="checklist">
+      <div class="section-head">
+        <div>
+          <h2 data-i18n="checklistTitle">EGE-2026 Preparation Checklist</h2>
+          <p class="sub" data-i18n="checklistSub">Tick completed items — progress is not saved.</p>
+        </div>
+      </div>
+      <ul class="checklist" id="checklistUl">
+        <!-- Populated by JS -->
+      </ul>
+    </section>
+
+    <section id="plan">
+      <div class="section-head">
+        <div>
+          <h2 data-i18n="planTitle">Full 25-Day Course for Grade 11</h2>
+          <p class="sub" data-i18n="planSub">Preparation route according to the EGE-2026 structure.</p>
+        </div>
+      </div>
+      <div class="plan-grid" id="planGrid">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <section id="support">
+      <div class="support-card">
+        <h2 data-i18n="supportTitle">🤝 SUPPORT THE PROJECT 💙</h2>
+        <p data-i18n="supportP1"><strong>All applications are free and ad-free.</strong></p>
+        <p data-i18n="supportP2">Your help supports offline security and education development.</p>
+        <p>
+          <span data-i18n="supportPhoneLabel">📱 TRANSFER BY PHONE NUMBER:</span>
+          <a class="phone" href="tel:89202275676">8-920-227-56-76</a>
+          <button class="btn small" onclick="copyPhone()" data-i18n="copyPhone">📋 Copy number</button>
+          <span id="copyStatus" class="copy-status" aria-live="polite"></span>
+        </p>
+        <p data-i18n="supportP3">✅ Money arrives instantly. No commission. Safe.</p>
+        <p>🌟 👉 <a href="https://ancf-hue.github.io/" target="_blank" rel="noopener noreferrer" data-i18n="supportCatalog">Catalog of free offline Anti-AI Shield apps</a>.</p>
+        <ul class="mini-list">
+          <li><strong>A.I. Core Autonomy // USA Edition</strong> — <span data-i18n="appDesc1">Bilingual offline simulator against psychological hacking and narcissistic swings of Big Tech.</span></li>
+          <li><strong data-i18n="appName2">Offline Assistant</strong> — <span data-i18n="appDesc2">Free local assistant without dependence on cloud services.</span></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" data-i18n="footer">
+      Anti-AI Qwen Academy • Full HTML Trainer • Computer Science EGE-2026
+    </div>
+  </footer>
+
+  <script>
+    const STORAGE = {
+      answers: "antiIiKvenCS2026v1Answers",
+      checklist: "antiIiKvenCS2026v1Checklist",
+      shuffle: "antiIiKvenCS2026v1Shuffle",
+      manual: "antiIiKvenCS2026v1Manual"
+    };
+
+    // ============================================================
+    // TRANSLATIONS DICTIONARY
+    // ============================================================
+    const I18N = {
+      en: {
+        docTitle: `Anti-AI Qwen Academy | Full Computer Science EGE-2026 Trainer`,
+        metaDesc: `Full autonomous computer science trainer in EGE 2026 format: 27 tasks, all data included in conditions, verified answers and explanations.`,
+        brandTitle: `Anti-AI Qwen Academy`,
+        brandSub: `Full EGE-2026 Trainer`,
+        navStructure: `Structure`,
+        navTrainer: `Trainer`,
+        navChecklist: `Checklist`,
+        navPlan: `25 Days`,
+        navSupport: `Support`,
+        badge: `Full Format • 27 Tasks • CS EGE-2026`,
+        h1: `Full <span class="accent">Computer Science</span> Trainer in EGE Format`,
+        lead: `27 short-answer tasks. All data is included directly in the conditions. No external files required. Logic, algorithms, programming, databases, networks, game theory, data processing.`,
+        disclaimer: `Attention: This is an author's autonomous trainer in the EGE-2026 format. The tasks are not exact copies of official FIPI variants.`,
+        actionTrainer: `Take the trainer`,
+        actionStructure: `Exam Structure`,
+        quickStats: `Quick Stats`,
+        metricAnswered: `tasks completed`,
+        metricCorrect: `correct answers`,
+        metricChecklist: `checklist`,
+        noteReset: `Progress is not saved: everything starts from zero each time the page is opened.`,
+        structureTitle: `Trainer Structure`,
+        structureSub: `27 tasks. Time — 3 hours 55 minutes.`,
+        trainerTitle: `Full Trainer: 27 Tasks`,
+        trainerSub: `All conditions are self-contained. Progress is not saved.`,
+        filterShow: `Show:`,
+        filterAll: `All`,
+        filterTheory: `Theory`,
+        filterAlgo: `Algorithms`,
+        filterProg: `Programming`,
+        filterData: `Data & Games`,
+        resetAll: `🗑 Reset all answers`,
+        checklistTitle: `EGE-2026 Preparation Checklist`,
+        checklistSub: `Tick completed items — progress is not saved.`,
+        planTitle: `Full 25-Day Course for Grade 11`,
+        planSub: `Preparation route according to the EGE-2026 structure.`,
+        dayPrefix: `Day`,
+        supportTitle: `🤝 SUPPORT THE PROJECT 💙`,
+        supportP1: `<strong>All applications are free and ad-free.</strong>`,
+        supportP2: `Your help supports offline security and education development.`,
+        supportPhoneLabel: `📱 TRANSFER BY PHONE NUMBER:`,
+        copyPhone: `📋 Copy number`,
+        copied: `✓ Copied`,
+        supportP3: `✅ Money arrives instantly. No commission. Safe.`,
+        supportCatalog: `Catalog of free offline Anti-AI Shield apps`,
+        appDesc1: `Bilingual offline simulator against psychological hacking and narcissistic swings of Big Tech.`,
+        appName2: `Offline Assistant`,
+        appDesc2: `Free local assistant without dependence on cloud services.`,
+        footer: `Anti-AI Qwen Academy • Full HTML Trainer • Computer Science EGE-2026`,
+
+        // Card Content Translations
+        cardTheoryTag: `Theory`,
+        cardTheoryTitle: `Tasks 1, 2, 4, 7, 11, 13`,
+        cardT1: `1 — graphs and roads`,
+        cardT2: `2 — truth tables`,
+        cardT4: `4 — Fano code`,
+        cardT7: `7 — sound encoding`,
+        cardT11: `11 — memory volume`,
+        cardT13: `13 — IP addresses`,
+        
+        cardAlgoTag: `Algorithms`,
+        cardAlgoTitle: `Tasks 5, 6, 8, 12, 16, 22, 23`,
+        cardA5: `5 — binary record algorithms`,
+        cardA6: `6 — Turtle executor`,
+        cardA8: `8 — combinatorics`,
+        cardA12: `12 — Turing machine`,
+        cardA16: `16 — recursive algorithms`,
+        cardA22: `22 — parallel processes`,
+        cardA23: `23 — executor programs`,
+
+        cardProgTag: `Programming`,
+        cardProgTitle: `Tasks 14, 15, 17, 24, 25`,
+        cardP14: `14 — number systems`,
+        cardP15: `15 — segments on a line`,
+        cardP17: `17 — sequence processing`,
+        cardP24: `24 — text processing`,
+        cardP25: `25 — number masks`,
+
+        cardDataTag: `Data and Games`,
+        cardDataTitle: `Tasks 3, 9, 10, 18, 19–21, 26, 27`,
+        cardD3: `3 — databases`,
+        cardD9_10: `9, 10 — tables and search`,
+        cardD18: `18 — robot in square`,
+        cardD19_21: `19–21 — game theory`,
+        cardD26: `26 — store data processing`,
+        cardD27: `27 — star clustering`,
+
+        // Quiz Labels
+        qLabel1: `1. Question`,
+        qLabel2: `2. Task Info`,
+        qLabel3: `3. Trainer — Answer Yourself`,
+        resCorrect: `✅ Correct!`,
+        resWrong: `❌ Wrong.`,
+        resAns: `Correct answer:`,
+        resExp: `Explanation:`,
+        resSrc: `Source:`,
+        sumDone: `Tasks completed:`,
+        sumOf: `of`,
+        sumCorr: `Correct answers:`,
+        sumFin: `Answer all tasks to see the final result.`,
+        verExc: `Excellent result! You are well prepared for EGE-2026.`,
+        verGood: `Good, but analyze the task mistakes.`,
+        verNeed: `You need to carefully work through the material.`,
+        confReset: `Reset all answers and shuffle options again?`,
+        errCopy: `Could not copy automatically. Number: `,
+        
+        // Topic Labels
+        topicTheory: `Theory`,
+        topicAlgo: `Algorithms`,
+        topicProg: `Programming`,
+        topicData: `Data & Games`,
+
+        // Timer Labels
+        timerCS: `CS Exam — 235 min`,
+        timerPractice: `Practice — 60 min`,
+        timerUp: `Time is up! Please finish your work.`,
+        timerStart: `Start timer`,
+        timerPause: `Pause timer`,
+        timerReset: `Reset timer`
+      },
+      ru: {
+        docTitle: `Анти-ИИ Квен Академия | Полный тренажёр информатика ЕГЭ-2026`,
+        metaDesc: `Полный автономный тренажёр по информатике в формате ЕГЭ 2026: 27 заданий, все данные в условиях, проверенные ответы и пояснения.`,
+        brandTitle: `Анти-ИИ Квен Академия`,
+        brandSub: `Полный тренажёр ЕГЭ-2026`,
+        navStructure: `Структура`,
+        navTrainer: `Тренажёр`,
+        navChecklist: `Чек-лист`,
+        navPlan: `25 дней`,
+        navSupport: `Поддержать`,
+        badge: `Полный формат • 27 заданий • Информатика ЕГЭ-2026`,
+        h1: `Полный тренажёр <span class="accent">по информатике</span> в формате ЕГЭ`,
+        lead: `27 заданий с кратким ответом. Все данные включены прямо в условия. Внешние файлы не требуются. Логика, алгоритмы, программирование, базы данных, сети, теория игр, обработка данных.`,
+        disclaimer: `Внимание: это авторский автономный тренажёр в формате ЕГЭ-2026. Задания не являются дословной копией официальных вариантов ФИПИ.`,
+        actionTrainer: `Пройти тренажёр`,
+        actionStructure: `Структура экзамена`,
+        quickStats: `Быстрая статистика`,
+        metricAnswered: `заданий пройдено`,
+        metricCorrect: `правильных ответов`,
+        metricChecklist: `чек-лист`,
+        noteReset: `Прогресс не сохраняется: при каждом открытии страницы всё начинается с нуля.`,
+        structureTitle: `Структура тренажёра`,
+        structureSub: `27 заданий. Время — 3 часа 55 минут.`,
+        trainerTitle: `Полный тренажёр: 27 заданий`,
+        trainerSub: `Все условия самодостаточны. Прогресс не сохраняется.`,
+        filterShow: `Показать:`,
+        filterAll: `Все`,
+        filterTheory: `Теория`,
+        filterAlgo: `Алгоритмы`,
+        filterProg: `Программирование`,
+        filterData: `Данные и игры`,
+        resetAll: `🗑 Сбросить все ответы`,
+        checklistTitle: `Чек-лист подготовки к ЕГЭ-2026`,
+        checklistSub: `Отмечай выполненные пункты — прогресс не сохраняется.`,
+        planTitle: `Полный курс 25 дней для 11 класса`,
+        planSub: `Маршрут подготовки по структуре ЕГЭ-2026.`,
+        dayPrefix: `День`,
+        supportTitle: `🤝 ПОДДЕРЖАТЬ ПРОЕКТ 💙`,
+        supportP1: `<strong>Все приложения бесплатны и без рекламы.</strong>`,
+        supportP2: `Ваша помощь помогает развитию офлайн-безопасности и образования.`,
+        supportPhoneLabel: `📱 ПЕРЕВОД ПО НОМЕРУ ТЕЛЕФОНА:`,
+        copyPhone: `📋 Копировать номер`,
+        copied: `✓ Скопировано`,
+        supportP3: `✅ Деньги придут мгновенно. Без комиссии. Безопасно.`,
+        supportCatalog: `Каталог бесплатных офлайн-приложений Anti-AI Shield`,
+        appDesc1: `«Анти-ИИ: Манифест Суверенной Личности». Двуязычный офлайн-симулятор против психологического взлома и нарциссических качелей Big Tech.`,
+        appName2: `Офлайн-Ассистент`,
+        appDesc2: `Бесплатный локальный помощник без зависимости от облачных сервисов.`,
+        footer: `Анти-ИИ Квен Академия • Полный HTML-тренажёр • Информатика ЕГЭ-2026`,
+
+        // Card Content Translations
+        cardTheoryTag: `Теория`,
+        cardTheoryTitle: `Задания 1, 2, 4, 7, 11, 13`,
+        cardT1: `1 — графы и дороги`,
+        cardT2: `2 — таблицы истинности`,
+        cardT4: `4 — код Фано`,
+        cardT7: `7 — кодирование звука`,
+        cardT11: `11 — объём памяти`,
+        cardT13: `13 — IP-адреса`,
+        
+        cardAlgoTag: `Алгоритмы`,
+        cardAlgoTitle: `Задания 5, 6, 8, 12, 16, 22, 23`,
+        cardA5: `5 — алгоритмы с двоичной записью`,
+        cardA6: `6 — исполнитель Черепаха`,
+        cardA8: `8 — комбинаторика`,
+        cardA12: `12 — машина Тьюринга`,
+        cardA16: `16 — рекурсивные алгоритмы`,
+        cardA22: `22 — параллельные процессы`,
+        cardA23: `23 — исполнитель`,
+
+        cardProgTag: `Программирование`,
+        cardProgTitle: `Задания 14, 15, 17, 24, 25`,
+        cardP14: `14 — системы счисления`,
+        cardP15: `15 — отрезки на прямой`,
+        cardP17: `17 — обработка последовательности`,
+        cardP24: `24 — обработка текста`,
+        cardP25: `25 — маски чисел`,
+
+        cardDataTag: `Данные и игры`,
+        cardDataTitle: `Задания 3, 9, 10, 18, 19–21, 26, 27`,
+        cardD3: `3 — базы данных`,
+        cardD9_10: `9, 10 — таблицы и поиск в тексте`,
+        cardD18: `18 — робот в квадрате`,
+        cardD19_21: `19–21 — теория игр`,
+        cardD26: `26 — обработка данных магазина`,
+        cardD27: `27 — кластеризация звёзд`,
+
+        // Quiz Labels
+        qLabel1: `1. Вопрос`,
+        qLabel2: `2. Информация о задании`,
+        qLabel3: `3. Тренажёр — ответь сам`,
+        resCorrect: `✅ Правильно!`,
+        resWrong: `❌ Неправильно.`,
+        resAns: `Правильный ответ:`,
+        resExp: `Пояснение:`,
+        resSrc: `Источник:`,
+        sumDone: `Пройдено заданий:`,
+        sumOf: `из`,
+        sumCorr: `Правильных ответов:`,
+        sumFin: `Ответь на все задания, чтобы увидеть итог.`,
+        verExc: `Отличный результат! Ты хорошо готов к ЕГЭ-2026.`,
+        verGood: `Хорошо, но разбери ошибки по заданиям.`,
+        verNeed: `Нужно внимательно проработать материал.`,
+        confReset: `Сбросить все ответы и перемешать варианты заново?`,
+        errCopy: `Не удалось скопировать автоматически. Номер: `,
+        
+        // Topic Labels
+        topicTheory: `Теория`,
+        topicAlgo: `Алгоритмы`,
+        topicProg: `Программирование`,
+        topicData: `Данные и игры`,
+
+        // Timer Labels
+        timerCS: `Экзамен ИИ — 235 мин`,
+        timerPractice: `Тренировка — 60 мин`,
+        timerUp: `Время вышло! Пожалуйста, завершите работу.`,
+        timerStart: `Запустить таймер`,
+        timerPause: `Пауза таймера`,
+        timerReset: `Сброс таймера`
+      }
+    };
+
+    let currentLang = "en";
+
+    function loc(key) {
+      return I18N[currentLang][key] || "";
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, function (m) {
+        return {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        }[m];
+      });
+    }
+
+    function scrollToId(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    // ============================================================
+    // DATA STRUCTURES (Translated Content)
+    // ============================================================
+    
+    const checklistItemsData = [
+      { key: "ch1", labelEn: "Reviewed number systems (2, 8, 10, 16, 36)", labelRu: "Повторил системы счисления (2, 8, 10, 16, 36)" },
+      { key: "ch2", labelEn: "Practiced information measurement units", labelRu: "Отработал единицы измерения информации" },
+      { key: "ch3", labelEn: "Reviewed logical operations and truth tables", labelRu: "Повторил логические операции и таблицы истинности" },
+      { key: "ch4", labelEn: "Practiced Fano code and Fano condition", labelRu: "Отработал код Фано и условие Фано" },
+      { key: "ch5", labelEn: "Reviewed algorithms with executors", labelRu: "Повторил алгоритмы с исполнителями" },
+      { key: "ch6", labelEn: "Practiced loops and branches in programming", labelRu: "Отработал циклы и ветвления в программировании" },
+      { key: "ch7", labelEn: "Reviewed array and string processing", labelRu: "Повторил обработку массивов и строк" },
+      { key: "ch8", labelEn: "Practiced recursive algorithms", labelRu: "Отработал рекурсивные алгоритмы" },
+      { key: "ch9", labelEn: "Reviewed databases and SQL queries", labelRu: "Повторил базы данных и SQL-запросы" },
+      { key: "ch10", labelEn: "Practiced spreadsheets", labelRu: "Отработал электронные таблицы" },
+      { key: "ch11", labelEn: "Reviewed network technologies (IP, masks)", labelRu: "Повторил сетевые технологии (IP, маски)" },
+      { key: "ch12", labelEn: "Practiced game theory (tasks 19-21)", labelRu: "Отработал теорию игр (задачи 19-21)" },
+      { key: "ch13", labelEn: "Reviewed combinatorics", labelRu: "Повторил комбинаторику" },
+      { key: "ch14", labelEn: "Practiced text file processing", labelRu: "Отработал обработку текстовых файлов" },
+      { key: "ch15", labelEn: "Reviewed number masks and bit operations", labelRu: "Повторил маски чисел и операции с битами" },
+      { key: "ch16", labelEn: "Solved tasks under time limit (235 minutes)", labelRu: "Решал задания на скорость (235 минут)" },
+      { key: "ch17", labelEn: "Checked work in spreadsheet editor", labelRu: "Проверил работу в редакторе электронных таблиц" },
+      { key: "ch18", labelEn: "Checked work in programming environment", labelRu: "Проверил работу в среде программирования" },
+      { key: "ch19", labelEn: "Solved full variant under time", labelRu: "Решал полный вариант на время" },
+      { key: "ch20", labelEn: "Analyzed mistakes across all 27 tasks", labelRu: "Разобрал ошибки по всем 27 заданиям" }
+    ];
+
+    const planDaysData = [
+      { day: 1, critical: true, en: "Diagnostics: exam structure, 27 tasks, weak topics.", ru: "Диагностика: структура экзамена, 27 заданий, слабые темы." },
+      { day: 2, critical: false, en: "Number systems and information units.", ru: "Системы счисления и единицы информации." },
+      { day: 3, critical: false, en: "Logic and truth tables.", ru: "Логика и таблицы истинности." },
+      { day: 4, critical: false, en: "Encoding (Fano, sound, image).", ru: "Кодирование (Фано, звук, изображение)." },
+      { day: 5, critical: false, en: "Analysis of algorithms and executors.", ru: "Анализ алгоритмов и исполнителей." },
+      { day: 6, critical: false, en: "Basics of programming: loops, branches.", ru: "Основы программирования: циклы, ветвления." },
+      { day: 7, critical: false, en: "Array and string processing.", ru: "Обработка массивов и строк." },
+      { day: 8, critical: false, en: "Recursive algorithms.", ru: "Рекурсивные алгоритмы." },
+      { day: 9, critical: false, en: "Databases and SQL.", ru: "Базы данных и SQL." },
+      { day: 10, critical: false, en: "Spreadsheets.", ru: "Электронные таблицы." },
+      { day: 11, critical: false, en: "Network technologies (IP, masks).", ru: "Сетевые технологии (IP, маски)." },
+      { day: 12, critical: false, en: "Combinatorics and probability theory.", ru: "Комбинаторика и теория вероятностей." },
+      { day: 13, critical: true, en: "Game theory (tasks 19-21).", ru: "Теория игр (задания 19-21)." },
+      { day: 14, critical: true, en: "Text file processing.", ru: "Обработка текстовых файлов." },
+      { day: 15, critical: true, en: "Number masks and bit operations.", ru: "Маски чисел и битовые операции." },
+      { day: 16, critical: true, en: "Turing machine.", ru: "Машина Тьюринга." },
+      { day: 17, critical: true, en: "Robot in square.", ru: "Робот в квадрате." },
+      { day: 18, critical: true, en: "Parallel processes.", ru: "Параллельные процессы." },
+      { day: 19, critical: true, en: "Clustering and data analysis.", ru: "Кластеризация и анализ данных." },
+      { day: 20, critical: true, en: "Full practice test #1 under time.", ru: "Полный пробник №1 на время." },
+      { day: 21, critical: true, en: "Mistake analysis of practice test.", ru: "Разбор ошибок пробника." },
+      { day: 22, critical: true, en: "Full practice test #2 under time.", ru: "Полный пробник №2 на время." },
+      { day: 23, critical: false, en: "Work in spreadsheet editor.", ru: "Работа в редакторе таблиц." },
+      { day: 24, critical: false, en: "Work in programming environment.", ru: "Работа в среде программирования." },
+      { day: 25, critical: false, en: "Final checklist and review.", ru: "Финальный чек-лист и повторение." }
+    ];
+
+    // Quiz Data with Separate Options Arrays for RU and EN
+    const quizRaw = [
+      {
+        id: 1, topic: "theory", task: 1,
+        en: {
+          text: `The table shows road lengths (in km) between five points. A dash means no road.\n\n    1  2  3  4  5\n1   -  4  7  -  -\n2   4  -  2  5  -\n3   7  2  -  8 12\n4   -  5  8  -  6\n5   -  - 12  6  -\n\nDetermine the minimum path length from point 1 to point 5.`,
+          info: `Task on analyzing a graph given by adjacency matrix.`,
+          explanation: `Shortest path: 1 -> 2 -> 4 -> 5 = 4 + 5 + 6 = 15.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `В таблице приведены длины дорог (в км) между пятью пунктами. Прочерк означает отсутствие дороги.\n\n    1  2  3  4  5\n1   -  4  7  -  -\n2   4  -  2  5  -\n3   7  2  -  8 12\n4   -  5  8  -  6\n5   -  - 12  6  -\n\nОпределите минимальную длину пути из пункта 1 в пункт 5.`,
+          info: `Задание на анализ графа, заданного матрицей смежности.`,
+          explanation: `Кратчайший путь: 1 -> 2 -> 4 -> 5 = 4 + 5 + 6 = 15.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["15", "18", "19", "21"],
+        ruOptions: ["15", "18", "19", "21"],
+        correctIndex: 0
+      },
+      {
+        id: 2, topic: "theory", task: 2,
+        en: {
+          text: `How many sets of values of variables x, y, z make the function F = (x ∨ y) ∧ ¬z true?`,
+          info: `Task on truth tables and logical operations.`,
+          explanation: `F is true when z = 0 and at least one of x or y equals 1. Sets: (1,0,0), (0,1,0), (1,1,0). Total 3.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Сколько наборов значений переменных x, y, z обращают в истину функцию F = (x ∨ y) ∧ ¬z?`,
+          info: `Задание на таблицы истинности и логические операции.`,
+          explanation: `F истинна, когда z = 0 и хотя бы одна из переменных x или y равна 1. Набор: (1,0,0), (0,1,0), (1,1,0). Всего 3.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["1", "2", "3", "4"],
+        ruOptions: ["1", "2", "3", "4"],
+        correctIndex: 2
+      },
+      {
+        id: 3, topic: "data", task: 3,
+        en: {
+          text: `Database fragment "Products":\n\nNo.; Item; District; Date; Weight (kg)\n1; Starch; Oktyabrsky; 02.06; 100\n2; Sugar; Oktyabrsky; 03.06; 200\n3; Starch; Central; 04.06; 150\n4; Starch; Oktyabrsky; 07.06; 260\n5; Starch; Oktyabrsky; 09.06; 80\n6; Starch; Leninsky; 05.06; 300\n7; Potato; Oktyabrsky; 06.06; 500\n8; Starch; Oktyabrsky; 01.06; 40\n\nDetermine the total weight of starch delivered to stores in Oktyabrsky district from June 1 to June 8 inclusive.`,
+          info: `Task on filtering database records by multiple conditions.`,
+          explanation: `Records 1, 4 and 8 fit: 100 + 260 + 40 = 400 kg.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Фрагмент базы данных «Продукты»:\n\n№; Товар; Район; Дата; Вес (кг)\n1; Крахмал; Октябрьский; 02.06; 100\n2; Сахар; Октябрьский; 03.06; 200\n3; Крахмал; Центральный; 04.06; 150\n4; Крахмал; Октябрьский; 07.06; 260\n5; Крахмал; Октябрьский; 09.06; 80\n6; Крахмал; Ленинский; 05.06; 300\n7; Картофель; Октябрьский; 06.06; 500\n8; Крахмал; Октябрьский; 01.06; 40\n\nОпределите общий вес крахмала, поступившего в магазины Октябрьского района с 1 по 8 июня включительно.`,
+          info: `Задание на фильтрацию записей базы данных по нескольким условиям.`,
+          explanation: `Подходят записи 1, 4 и 8: 100 + 260 + 40 = 400 кг.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["360", "400", "480", "540"],
+        ruOptions: ["360", "400", "480", "540"],
+        correctIndex: 1
+      },
+      {
+        id: 4, topic: "theory", task: 4,
+        en: {
+          text: `Five letters A, B, C, D, E use an uneven binary code satisfying the Fano condition. Known: A=0, B=10, C=110. Specify the shortest codeword for letter D such that it remains possible to encode letter E. If there are several such codes, specify the smallest numerical value.`,
+          info: `Task on Fano condition and prefix codes.`,
+          explanation: `Code 111 does not fit because then no free code remains for E. Code 1101 conflicts with 110, code 1011 conflicts with 10. Smallest suitable code is 1110, and for E we can take 1111.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Для пяти букв А, Б, В, Г, Д используется неравномерный двоичный код, удовлетворяющий условию Фано. Известно: А=0, Б=10, В=110. Укажите кратчайшее кодовое слово для буквы Г, при котором останется возможность закодировать букву Д. Если таких кодов несколько, укажите наименьшее по числовому значению.`,
+          info: `Задание на условие Фано и префиксные коды.`,
+          explanation: `Код 111 не подходит, так как тогда не останется свободного кода для Д. Код 1101 конфликтует с 110, код 1011 конфликтует с 10. Наименьший подходящий код — 1110, а для Д можно взять 1111.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["111", "1110", "1101", "1011"],
+        ruOptions: ["111", "1110", "1101", "1011"],
+        correctIndex: 1
+      },
+      {
+        id: 5, topic: "algo", task: 5,
+        en: {
+          text: `Natural number N is fed to algorithm input. Algorithm builds new number R:\n1. Binary representation of N is built.\n2. If sum of binary digits is even — append 0 to right, then replace two leftmost bits with 10.\n   If odd — append 1 to right, then replace two leftmost bits with 11.\n3. Result is converted to decimal system.\n\nSpecify maximum number N after which processing yields R ≤ 19.`,
+          info: `Task on analyzing algorithms with binary records.`,
+          explanation: `N=12: 1100, digit sum 2 — even. Append 0: 11000. Replace first two bits: 10000 = 16 ≤ 19. N=13 gives 11011 -> 11011 = 27 > 19.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `На вход алгоритма подаётся натуральное число N. Алгоритм строит по нему новое число R:\n1. Строится двоичная запись числа N.\n2. Если сумма двоичных цифр чётная — дописывается 0 справа, затем два левых разряда заменяются на 10.\n   Если нечётная — дописывается 1 справа, затем два левых разряда заменяются на 11.\n3. Результат переводится в десятичную систему.\n\nУкажите максимальное число N, после обработки которого получается число R ≤ 19.`,
+          info: `Задание на анализ алгоритмов с двоичной записью.`,
+          explanation: `N=12: 1100, сумма цифр 2 — чётная. Дописываем 0: 11000. Замена первых двух разрядов: 10000 = 16 ≤ 19. N=13 даёт 11011 -> 11011 = 27 > 19.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["10", "11", "12", "13"],
+        ruOptions: ["10", "11", "12", "13"],
+        correctIndex: 2
+      },
+      {
+        id: 6, topic: "algo", task: 6,
+        en: {
+          text: `Executor Turtle is at origin, head pointing up. Given algorithm:\nRepeat 2 [Forward 5 Right 90 Forward 3 Right 90]\n\nDetermine how many integer coordinate points are strictly inside the area bounded by the resulting line.`,
+          info: `Task on executing Turtle algorithm and counting integer points.`,
+          explanation: `Result is rectangle 5 by 3. Strictly inside are (5-1)*(3-1) = 8 points.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Исполнитель Черепаха находится в начале координат, голова направлена вверх. Дан алгоритм:\nПовтори 2 [Вперёд 5 Направо 90 Вперёд 3 Направо 90]\n\nОпределите, сколько точек с целочисленными координатами находится строго внутри области, ограниченной полученной линией.`,
+          info: `Задание на исполнение алгоритма Черепашки и подсчёт целых точек.`,
+          explanation: `Получается прямоугольник 5 на 3. Строго внутри находится (5-1)*(3-1) = 8 точек.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["6", "8", "10", "12"],
+        ruOptions: ["6", "8", "10", "12"],
+        correctIndex: 1
+      },
+      {
+        id: 7, topic: "theory", task: 7,
+        en: {
+          text: `Lena records voice message. Message is digitized in stereo format with sampling rate 28,000 Hz and coding depth 8 bits.\n\nDetermine minimum number of KB needed to save message lasting 2 minutes 20 seconds.`,
+          info: `Task on volume of audio information.`,
+          explanation: `V = 2 * 28000 * 8 * 140 = 62,720,000 bits = 7,840,000 bytes = 7656.25 KB. Round up: 7657 KB.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Лена записывает голосовое сообщение. Сообщение оцифровывается в формате стерео с частотой дискретизации 28 000 Гц и глубиной кодирования 8 бит.\n\nОпределите наименьшее количество Кбайт, необходимое для сохранения сообщения длительностью 2 минуты 20 секунд.`,
+          info: `Задание на объём звуковой информации.`,
+          explanation: `V = 2 * 28000 * 8 * 140 = 62 720 000 бит = 7 840 000 байт = 7656,25 Кбайт. Округляем вверх: 7657 Кбайт.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["7656", "7657", "7658", "7659"],
+        ruOptions: ["7656", "7657", "7658", "7659"],
+        correctIndex: 1
+      },
+      {
+        id: 8, topic: "algo", task: 8,
+        en: {
+          text: `All three-letter words composed of letters A, B, C, D, E are written in alphabetical order and numbered.\n\nDetermine number of first word starting with letter C and containing letter D.`,
+          info: `Task on combinatorics and word numbering.`,
+          explanation: `Blocks of words on A and B occupy 5^2 = 25 numbers each. Words on C start from number 51: CAA=51, CAB=52, CAC=53, CAD=54.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Все трёхбуквенные слова, составленные из букв А, Б, В, Г, Д, записаны в алфавитном порядке и пронумерованы.\n\nОпределите номер первого слова, которое начинается с буквы В и содержит букву Г.`,
+          info: `Задание на комбинаторику и нумерацию слов.`,
+          explanation: `Блоки слов на А и Б занимают по 5^2 = 25 номеров. Слова на В начинаются с номера 51: В А А = 51, В А Б = 52, В А В = 53, В А Г = 54.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["51", "54", "55", "75"],
+        ruOptions: ["51", "54", "55", "75"],
+        correctIndex: 1
+      },
+      {
+        id: 9, topic: "data", task: 9,
+        en: {
+          text: `Table of 6 rows, each row has four natural numbers:\n\n3 4 5 6\n2 3 4 8\n1 2 3 10\n5 5 5 14\n1 1 2 3\n4 4 4 4\n\nDetermine number of rows where both conditions are met:\n– largest number less than sum of other three;\n– numbers cannot be split into two pairs with equal sums.`,
+          info: `Task on analyzing numeric sets.`,
+          explanation: `Rows fitting: 2 3 4 8; 5 5 5 14; 1 1 2 3. Total 3 rows.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Дана таблица из 6 строк, в каждой строке четыре натуральных числа:\n\n3 4 5 6\n2 3 4 8\n1 2 3 10\n5 5 5 14\n1 1 2 3\n4 4 4 4\n\nОпределите количество строк, для которых выполнены оба условия:\n– наибольшее число меньше суммы трёх других;\n– числа нельзя разбить на две пары с равными суммами.`,
+          info: `Задание на анализ числовых наборов.`,
+          explanation: `Подходят строки: 2 3 4 8; 5 5 5 14; 1 1 2 3. Всего 3 строки.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["2", "3", "4", "5"],
+        ruOptions: ["2", "3", "4", "5"],
+        correctIndex: 1
+      },
+      {
+        id: 10, topic: "data", task: 10,
+        en: {
+          text: `How many times substring "bc" occurs in string abcbcbbcbc? All occurrences including overlapping ones are counted.`,
+          info: `Task on searching substrings in text.`,
+          explanation: `Occurrences at positions 2, 4, 7 and 9. Total 4.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Сколько раз встречается подстрока «bc» в строке abcbcbbcbc? Учитываются все вхождения, в том числе перекрывающиеся.`,
+          info: `Задание на поиск подстрок в тексте.`,
+          explanation: `Вхождения находятся на позициях 2, 4, 7 и 9. Всего 4.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["3", "4", "5", "6"],
+        ruOptions: ["3", "4", "5", "6"],
+        correctIndex: 1
+      },
+      {
+        id: 11, topic: "theory", task: 11,
+        en: {
+          text: `Each object gets identifier of 257 characters. Characters taken from 16 hex digits and 4080 special alphabet symbols.\n\nMinimum possible integer number of bytes allocated for storing each identifier. All characters encoded with same minimum possible number of bits.\n\nDetermine memory volume in MB for storing 8,388,608 identifiers.`,
+          info: `Task on measuring information and encoding.`,
+          explanation: `Total chars: 16 + 4080 = 4096 = 2^12, so 12 bits per char. 257 * 12 = 3084 bits = 385.5 bytes, round up to 386 bytes. 386 * 8,388,608 bytes = 3088 MB.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Каждому объекту присваивается идентификатор из 257 символов. Символы берутся из 16 цифр шестнадцатеричной системы и 4080 символов специального алфавита.\n\nДля хранения каждого идентификатора отведено минимально возможное целое число байт. Все символы кодируются одинаковым минимально возможным количеством бит.\n\nОпределите объём памяти в Мбайт для хранения 8 388 608 идентификаторов.`,
+          info: `Задание на измерение информации и кодирование.`,
+          explanation: `Всего символов: 16 + 4080 = 4096 = 2^12, значит 12 бит на символ. 257 * 12 = 3084 бита = 385,5 байта, округляем вверх до 386 байт. 386 * 8 388 608 байт = 3088 Мбайт.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["256", "512", "3088", "4096"],
+        ruOptions: ["256", "512", "3088", "4096"],
+        correctIndex: 2
+      },
+      {
+        id: 12, topic: "algo", task: 12,
+        en: {
+          text: `Binary number 1011 recorded on Turing machine tape. Head stands on leftmost one.\n\nProgram: if read 1, write 0 and move right; if read 0, write 1 and move right; if empty cell, stop.\n\nWhat decimal number remains on tape?`,
+          info: `Task on analyzing simple Turing machine program.`,
+          explanation: `All bits inverted: 1011 -> 0100. In decimal this is 4.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `На ленте машины Тьюринга записано двоичное число 1011. Головка стоит на самой левой единице.\n\nПрограмма: если считан 1, записать 0 и сдвинуться вправо; если считан 0, записать 1 и сдвинуться вправо; если пустая ячейка, остановиться.\n\nКакое десятичное число останется на ленте?`,
+          info: `Задание на анализ простой программы машины Тьюринга.`,
+          explanation: `Все биты инвертируются: 1011 -> 0100. В десятичной системе это 4.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["4", "8", "11", "15"],
+        ruOptions: ["4", "8", "11", "15"],
+        correctIndex: 0
+      },
+      {
+        id: 13, topic: "theory", task: 13,
+        en: {
+          text: `Network defined by IP address 68.203.243.87 and mask 255.255.224.0.\n\nFind largest host IP address in this network and specify sum of its octets.`,
+          info: `Task on IP addresses and network masks.`,
+          explanation: `Mask 255.255.224.0 gives network 68.203.224.0. Broadcast address: 68.203.255.255. Largest host address: 68.203.255.254. Sum: 68 + 203 + 255 + 254 = 780.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Сеть задана IP-адресом 68.203.243.87 и маской 255.255.224.0.\n\nНайдите наибольший IP-адрес узла в этой сети и укажите сумму его октетов.`,
+          info: `Задание на IP-адреса и маски сети.`,
+          explanation: `Маска 255.255.224.0 даёт сеть 68.203.224.0. Широковещательный адрес: 68.203.255.255. Наибольший адрес узла: 68.203.255.254. Сумма: 68 + 203 + 255 + 254 = 780.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["250", "255", "260", "780"],
+        ruOptions: ["250", "255", "260", "780"],
+        correctIndex: 3
+      },
+      {
+        id: 14, topic: "prog", task: 14,
+        en: {
+          text: `Determine number of digits with even numerical value in hexadecimal representation of number 7 · 16^5 − 16^5.`,
+          info: `Task on number systems and analysis of number record.`,
+          explanation: `7 · 16^5 − 16^5 = 6 · 16^5. In hex this is 600000. Even digits: 6 and five zeros, total 6.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Определите количество цифр с чётным числовым значением в шестнадцатеричной записи числа 7 · 16^5 − 16^5.`,
+          info: `Задание на системы счисления и анализ записи числа.`,
+          explanation: `7 · 16^5 − 16^5 = 6 · 16^5. В шестнадцатеричной записи это 600000. Чётные цифры: 6 и пять нулей, всего 6.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["5", "6", "7", "8"],
+        ruOptions: ["5", "6", "7", "8"],
+        correctIndex: 1
+      },
+      {
+        id: 15, topic: "prog", task: 15,
+        en: {
+          text: `On number line segments B=[22; 40] and C=[32; 50] given.\n\nSpecify smallest possible length of segment A for which expression ¬(x ∈ A) → ((x ∈ B) ≡ (x ∈ C)) is true for any x.`,
+          info: `Task on logic and segments on number line.`,
+          explanation: `Outside A membership in B and C must coincide. Differences B and C are on [22;32) and (40;50]. To cover both areas with one segment, minimal A = [22;50], length 28.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `На числовой прямой даны отрезки B=[22; 40] и C=[32; 50].\n\nУкажите наименьшую возможную длину отрезка A, для которого выражение ¬(x ∈ A) → ((x ∈ B) ≡ (x ∈ C)) истинно при любом x.`,
+          info: `Задание на логику и отрезки на числовой прямой.`,
+          explanation: `Вне A принадлежность B и C должна совпадать. Различия B и C находятся на [22;32) и (40;50]. Чтобы покрыть оба участка одним отрезком, минимальный A = [22;50], длина 28.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["8", "10", "28", "30"],
+        ruOptions: ["8", "10", "28", "30"],
+        correctIndex: 2
+      },
+      {
+        id: 16, topic: "algo", task: 16,
+        en: {
+          text: `Algorithm for computing function F(n):\nF(n) = 1, if n < 10;\nF(n) = (n + 3) * F(n - 3), if n ≥ 10.\n\nWhat is ratio F(247563) / F(247560)?`,
+          info: `Task on recursive algorithms.`,
+          explanation: `By recurrence formula F(247563) = (247563 + 3) * F(247560) = 247566 * F(247560). Ratio equals 247566.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Алгоритм вычисления функции F(n):\nF(n) = 1, если n < 10;\nF(n) = (n + 3) * F(n - 3), если n ≥ 10.\n\nЧему равно отношение F(247563) / F(247560)?`,
+          info: `Задание на рекурсивные алгоритмы.`,
+          explanation: `По рекуррентной формуле F(247563) = (247563 + 3) * F(247560) = 247566 * F(247560). Отношение равно 247566.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["247560", "247563", "247566", "247569"],
+        ruOptions: ["247560", "247563", "247566", "247569"],
+        correctIndex: 2
+      },
+      {
+        id: 17, topic: "prog", task: 17,
+        en: {
+          text: `Given sequence of integers:\n6, -3, 2, 5, -1, 4, 10, -2\n\nDetermine number of element pairs with different indices whose sum is less than minimum positive element of sequence divisible by 5. Also specify maximum sum among such pairs.`,
+          info: `Task on sequence processing.`,
+          explanation: `Minimum positive element divisible by 5 is 5. Suitable pairs count 14, maximum sum among them is 4.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Дана последовательность целых чисел:\n6, -3, 2, 5, -1, 4, 10, -2\n\nОпределите количество пар элементов с разными номерами, сумма которых меньше минимального положительного элемента последовательности, кратного 5. Также укажите максимальную сумму среди таких пар.`,
+          info: `Задание на обработку последовательности.`,
+          explanation: `Минимальный положительный элемент, кратный 5, равен 5. Подходящих пар 14, максимальная сумма среди них равна 4.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["12 and 4", "14 and 4", "14 and 5", "16 and 3"],
+        ruOptions: ["12 и 4", "14 и 4", "14 и 5", "16 и 3"],
+        correctIndex: 1
+      },
+      {
+        id: 18, topic: "data", task: 18,
+        en: {
+          text: `Square 4×4 filled with coins:\n1 3 1 2\n2 1 4 3\n5 2 1 2\n1 7 3 9\n\nRobot starts in upper left cell and goes to lower right, moving only right or down. Visited cells collected. Determine maximum and minimum possible coin sum.`,
+          info: `Task on Robot path enumeration or dynamic programming.`,
+          explanation: `Minimum path sum is 18, maximum is 29.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Квадрат 4×4 заполнен монетами:\n1 3 1 2\n2 1 4 3\n5 2 1 2\n1 7 3 9\n\nРобот стартует в левой верхней клетке и идёт в правую нижнюю, перемещаясь только вправо или вниз. Посещённые клетки забираются. Определите максимальную и минимальную возможную сумму монет.`,
+          info: `Задание на перебор путей Робота или динамическое программирование.`,
+          explanation: `Минимальная сумма пути равна 18, максимальная равна 29.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["27 and 18", "29 and 18", "29 and 20", "31 and 17"],
+        ruOptions: ["27 и 18", "29 и 18", "29 и 20", "31 и 17"],
+        correctIndex: 1
+      },
+      {
+        id: 19, topic: "data", task: 19,
+        en: {
+          text: `Two piles of stones. First contains 11 stones, second S stones, 1 ≤ S ≤ 142. Players move alternately, Petya moves first.\n\nIn one turn you can:\n– add 4 stones to one pile;\n– multiply one pile by 3.\n\nGame ends when total stone count becomes at least 154. Winner makes last move.\n\nKnown Vanya won with his first move after unsuccessful Petya move. Specify minimum S.`,
+          info: `Task on game theory, minimum winning state.`,
+          explanation: `At S=16 Petya can move unsuccessfully: (11,16) -> (11,48). Then Vanya multiplies second pile by 3: (11,144), sum 155 ≥ 154. For S < 16 Vanya cannot win with first move after such Petya move.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Две кучи камней. Первая содержит 11 камней, вторая — S камней, 1 ≤ S ≤ 142. Игроки ходят по очереди, первым ходит Петя.\n\nЗа ход можно:\n– добавить 4 камня в одну кучу;\n– увеличить одну кучу в 3 раза.\n\nИгра заканчивается, когда суммарное количество камней становится не менее 154. Победитель — сделавший последний ход.\n\nИзвестно, что Ваня выиграл своим первым ходом после неудачного хода Пети. Укажите минимальное S.`,
+          info: `Задание на теорию игр, минимальное выигрышное состояние.`,
+          explanation: `При S=16 Петя может сходить неудачно: (11,16) -> (11,48). Тогда Ваня умножает вторую кучу на 3: (11,144), сумма 155 ≥ 154. Для S < 16 Ваня не сможет выиграть первым ходом после такого хода Пети.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["16", "30", "35", "40"],
+        ruOptions: ["16", "30", "35", "40"],
+        correctIndex: 0
+      },
+      {
+        id: 20, topic: "data", task: 20,
+        en: {
+          text: `For game from task 19 find two smallest S values where Petya has winning strategy such that:\n– Petya cannot win in one move;\n– Petya can win with his second move regardless of Vanya's moves.`,
+          info: `Task on second move strategy.`,
+          explanation: `Smallest suitable S values are 39 and 40. Petya first move multiplies first pile by 3: (11,S) -> (33,S). At S=39 and S=40 Vanya doesn't win immediately, but after any his move Petya wins with second move.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Для игры из задания 19 найдите два наименьших значения S, при которых у Пети есть выигрышная стратегия, причём:\n– Петя не может выиграть за один ход;\n– Петя может выиграть своим вторым ходом независимо от ходов Вани.`,
+          info: `Задание на стратегию второго хода.`,
+          explanation: `Наименьшие подходящие значения S = 39 и 40. Петя первым ходом умножает первую кучу на 3: (11,S) -> (33,S). При S=39 и S=40 Ваня не выигрывает сразу, но после любого его хода Петя выигрывает вторым ходом.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["39 and 40", "40 and 43", "43 and 45", "45 and 46"],
+        ruOptions: ["39 и 40", "40 и 43", "43 и 45", "45 и 46"],
+        correctIndex: 0
+      },
+      {
+        id: 21, topic: "data", task: 21,
+        en: {
+          text: `For game from task 19 find smallest S where:\n– Vanya has winning strategy allowing him to win with first or second move under any Petya play;\n– Vanya has no strategy guaranteed to win with first move.`,
+          info: `Task on Vanya strategy no later than second move.`,
+          explanation: `Smallest S = 41. Petya can go to (15,41) or (11,45), and then Vanya doesn't win with first move. But Vanya transfers game to position (15,45), after which he wins with his second move under any Petya move.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Для игры из задания 19 найдите наименьшее S, при котором:\n– у Вани есть выигрышная стратегия, позволяющая выиграть первым или вторым ходом при любой игре Пети;\n– у Вани нет стратегии, гарантированно выигрывающей первым ходом.`,
+          info: `Задание на стратегию Вани не позже второго хода.`,
+          explanation: `Наименьшее S = 41. Петя может пойти в (15,41) или (11,45), и тогда Ваня не выигрывает первым ходом. Но Ваня переводит игру в позицию (15,45), после чего выигрывает своим вторым ходом при любом ходе Пети.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["41", "45", "50", "55"],
+        ruOptions: ["41", "45", "50", "55"],
+        correctIndex: 0
+      },
+      {
+        id: 22, topic: "algo", task: 22,
+        en: {
+          text: `Given processes and dependencies (execution time in ms):\nA: 5, no dependencies\nB: 3, after A\nC: 4, after A\nD: 6, after B and C\nE: 2, after C\n\nDetermine minimum time after which all processes complete if independent processes run in parallel.`,
+          info: `Task on critical path.`,
+          explanation: `Critical path: A -> C -> D. Time: 5 + 4 + 6 = 15 ms.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Даны процессы и их зависимости (время выполнения в мс):\nA: 5, без зависимостей\nB: 3, после A\nC: 4, после A\nD: 6, после B и C\nE: 2, после C\n\nОпределите минимальное время, через которое завершатся все процессы, если независимые процессы выполняются параллельно.`,
+          info: `Задание на критический путь.`,
+          explanation: `Критический путь: A -> C -> D. Время: 5 + 4 + 6 = 15 мс.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["14", "15", "16", "17"],
+        ruOptions: ["14", "15", "16", "17"],
+        correctIndex: 1
+      },
+      {
+        id: 23, topic: "algo", task: 23,
+        en: {
+          text: `Executor transforms number on screen. Commands:\nA. Add 1\nB. Multiply by 2\nC. Multiply by 3\n\nHow many programs exist where initial number 2 results in 39 and computation trajectory does not contain number 14?`,
+          info: `Task on dynamic programming.`,
+          explanation: `Let dp[n] be number of programs from 2 to n not passing through 14. dp[2]=1, dp[14]=0. For other n: dp[n]=dp[n-1]+dp[n/2] if even+dp[n/3] if divisible by 3. Result dp[39]=188.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Исполнитель преобразует число на экране. Команды:\nA. Прибавить 1\nB. Умножить на 2\nC. Умножить на 3\n\nСколько существует программ, для которых при исходном числе 2 результатом является 39 и траектория вычислений не содержит числа 14?`,
+          info: `Задание на динамическое программирование.`,
+          explanation: `Обозначим dp[n] — число программ от 2 до n, не проходящих через 14. dp[2]=1, dp[14]=0. Для остальных n: dp[n]=dp[n-1]+dp[n/2] если чётное+dp[n/3] если делится на 3. Получается dp[39]=188.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["188", "173", "154", "133"],
+        ruOptions: ["188", "173", "154", "133"],
+        correctIndex: 0
+      },
+      {
+        id: 24, topic: "prog", task: 24,
+        en: {
+          text: `Text file represented by string ABCBCXBCYY.\n\nDetermine maximum length of contiguous substring where pair BC occurs exactly 2 times.`,
+          info: `Task on text processing.`,
+          explanation: `Pair BC occurs at positions 2-3, 4-5 and 7-8. Substring from 3rd to 10th character: CBCXBCYY contains exactly two BC pairs and has length 8.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Текстовый файл представлен строкой ABCBCXBCYY.\n\nОпределите максимальную длину подряд идущего подфрагмента, в котором пара символов BC встречается ровно 2 раза.`,
+          info: `Задание на обработку текста.`,
+          explanation: `Пара BC встречается в позициях 2-3, 4-5 и 7-8. Подфрагмент с 3-го по 10-й символ: CBCXBCYY содержит ровно две пары BC и имеет длину 8.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["6", "7", "8", "9"],
+        ruOptions: ["6", "7", "8", "9"],
+        correctIndex: 2
+      },
+      {
+        id: 25, topic: "prog", task: 25,
+        en: {
+          text: `Among natural numbers not exceeding 1000, find count of numbers matching mask 1*2 and divisible by 3.\n\nSymbol * means any sequence of digits, including empty.`,
+          info: `Task on number masks.`,
+          explanation: `Numbers fitting mask: 12, 102, 112, ..., 192. Of these divisible by 3: 12, 102, 132, 162, 192. Total 5 numbers.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `Среди натуральных чисел, не превышающих 1000, найдите количество чисел, соответствующих маске 1*2 и делящихся на 3.\n\nСимвол * означает любую последовательность цифр, в том числе пустую.`,
+          info: `Задание на маски чисел.`,
+          explanation: `Под маску подходят числа 12, 102, 112, ..., 192. Из них на 3 делятся: 12, 102, 132, 162, 192. Всего 5 чисел.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["4", "5", "6", "7"],
+        ruOptions: ["4", "5", "6", "7"],
+        correctIndex: 1
+      },
+      {
+        id: 26, topic: "data", task: 26,
+        en: {
+          text: `Store accounts for three product SKUs:\n\nSKU 1: price 100, sold 2, remaining 1\nSKU 2: price 200, sold 1, remaining 5\nSKU 3: price 300, sold 3, remaining 0\n\nExpensive products considered those with price exceeding arithmetic mean price of all SKUs. Sales leader chosen among expensive products by highest quantity sold.\n\nFind revenue from sales leader and remaining quantity of this product.`,
+          info: `Task on store data analysis.`,
+          explanation: `Average SKU price: (100+200+300)/3 = 200. Only SKU 3 is expensive. Its revenue: 300*3=900, remaining 0.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `В магазине учтены три артикула товаров:\n\nАртикул 1: цена 100, продано 2, осталось 1\nАртикул 2: цена 200, продано 1, осталось 5\nАртикул 3: цена 300, продано 3, осталось 0\n\nДорогими считаются товары, цена которых превышает среднюю арифметическую цену всех артикулов. Лидер продаж выбирается среди дорогих товаров по наибольшему количеству проданных единиц.\n\nНайдите выручку от лидера продаж и оставшееся количество этого товара.`,
+          info: `Задание на анализ данных магазина.`,
+          explanation: `Средняя цена артикулов: (100+200+300)/3 = 200. Дорогой только артикул 3. Его выручка: 300*3=900, осталось 0.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["300 and 0", "600 and 1", "900 and 0", "1200 and 2"],
+        ruOptions: ["300 и 0", "600 и 1", "900 и 0", "1200 и 2"],
+        correctIndex: 2
+      },
+      {
+        id: 27, topic: "data", task: 27,
+        en: {
+          text: `In sky fragment two clusters highlighted:\n\nCluster 1: points (1,1), (1,3), (3,1), (3,3)\nCluster 2: points (10,10), (10,12)\n\nCluster center is arithmetic mean of coordinates of its points.\nRed giants defined by points (9,10) and (12,14).\n\nFind coordinates of red giant closest to center of cluster with smallest number of points.`,
+          info: `Task on clustering and nearest point search.`,
+          explanation: `Smallest cluster is second, center: ((10+10)/2, (10+12)/2) = (10,11). Distance to (9,10) smaller than to (12,14). Answer: 9 and 10.`,
+          source: `Full Author Trainer`
+        },
+        ru: {
+          text: `В фрагменте звёздного неба выделены два кластера:\n\nКластер 1: точки (1,1), (1,3), (3,1), (3,3)\nКластер 2: точки (10,10), (10,12)\n\nЦентр кластера — среднее арифметическое координат его точек.\nКрасные гиганты заданы точками (9,10) и (12,14).\n\nНайдите координаты красного гиганта, ближайшего к центру кластера с наименьшим количеством точек.`,
+          info: `Задание на кластеризацию и поиск ближайшей точки.`,
+          explanation: `Наименьший кластер — второй, центр: ((10+10)/2, (10+12)/2) = (10,11). Расстояние до (9,10) меньше, чем до (12,14). Ответ: 9 и 10.`,
+          source: `Полный авторский тренажёр`
+        },
+        enOptions: ["9 and 10", "10 and 11", "12 and 14", "1 and 1"],
+        ruOptions: ["9 и 10", "10 и 11", "12 и 14", "1 и 1"],
+        correctIndex: 0
+      }
+    ];
+
+    // Process Quiz Data for current language
+    let quiz = [];
+
+    function prepareData() {
+      quiz = quizRaw.map(q => ({
+        ...q,
+        text: q[currentLang].text,
+        info: q[currentLang].info,
+        explanation: q[currentLang].explanation,
+        source: q[currentLang].source,
+        options: currentLang === 'ru' ? [...q.ruOptions] : [...q.enOptions],
+        correct: q.correctIndex 
+      }));
+    }
+
+    // ============================================================
+    // LOGIC FUNCTIONS
+    // ============================================================
+
+    const QUIZ_ORIGINAL_VALUES = quizRaw.map(function (q) {
+      return {
+        correctValueRu: q.ruOptions[q.correctIndex],
+        correctValueEn: q.enOptions[q.correctIndex]
+      };
+    });
+
+    function seededShuffle(arr, seedNum) {
+      const a = arr.slice();
+      let s = seedNum || 1;
+      const rand = function () {
+        s = (s * 9301 + 49297) % 233280;
+        return s / 233280;
+      };
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(rand() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function shuffleOptionsOnce() {
+      const seed = quizRaw.map(function () {
+        return Math.floor(Math.random() * 1000000) + 1;
+      });
+
+      quiz.forEach(function (q, i) {
+        const correctVal = currentLang === 'ru' 
+           ? QUIZ_ORIGINAL_VALUES[i].correctValueRu 
+           : QUIZ_ORIGINAL_VALUES[i].correctValueEn;
+
+        const shuffled = seededShuffle(q.options, seed[i]);
+        q.options = shuffled;
+        q.correct = shuffled.indexOf(correctVal);
+      });
+    }
+
+    let savedAnswers = {};
+    let checklistState = {};
+    let currentFilter = "all";
+
+    function applyUIText() {
+      const L = I18N[currentLang];
+      document.title = L.docTitle;
+      document.documentElement.lang = currentLang;
+
+      const meta = document.querySelector('meta[name="description"]');
+      if (meta) meta.setAttribute("content", L.metaDesc);
+
+      document.querySelectorAll("[data-i18n]").forEach(function (el) {
+        const key = el.dataset.i18n;
+        if (L[key] != null) el.innerHTML = L[key];
+      });
+      
+      updateDynamicLabels();
+    }
+
+    function updateDynamicLabels() {}
+
+    function renderCard(card, index, containerId) {
+      const container = document.getElementById(containerId);
+      const div = document.createElement('div');
+      div.className = 'card ' + (card.cls || '');
+      
+      let inner = `<span class="tag ${card.tagCls || ''}">${loc(card.tagKey)}</span>`;
+      inner += `<h3>${loc(card.titleKey)}</h3>`;
+      
+      if (card.listKeys) {
+        inner += `<ul class="mini-list">${card.listKeys.map(k => `<li>${loc(k)}</li>`).join('')}</ul>`;
+      } else if (card.textKey) {
+        inner += `<p>${escapeHtml(I18N[currentLang][card.textKey])}</p>`;
+      }
+      
+      div.innerHTML = inner;
+      container.appendChild(div);
+    }
+
+    function renderStaticSections() {
+      // Structure cards handled manually in HTML for simplicity as they don't change much except labels
+      // We just rely on data-i18n attributes already present in HTML
+    }
+
+    function renderChecklist() {
+      const ul = document.getElementById("checklistUl");
+      ul.innerHTML = checklistItemsData.map(function (item) {
+        const checked = checklistState[item.key] ? "checked" : "";
+        const doneClass = checklistState[item.key] ? "done" : "";
+        const labelText = currentLang === "ru" ? item.labelRu : item.labelEn;
+        return `
+          <li class="check-item ${doneClass}">
+            <input type="checkbox" id="${item.key}" data-key="${item.key}" ${checked} />
+            <label for="${item.key}">${escapeHtml(labelText)}</label>
+          </li>
+        `;
+      }).join("");
+    }
+
+    function renderPlan() {
+      const L = I18N[currentLang];
+      document.getElementById("planGrid").innerHTML = planDaysData.map(function (d) {
+        const text = currentLang === "ru" ? d.ru : d.en;
+        return `
+          <div class="day ${d.critical ? "critical" : ""}">
+            <b>${escapeHtml(L.dayPrefix)} ${d.day}</b>
+            ${escapeHtml(text)}
+          </div>
+        `;
+      }).join("");
+    }
+
+    function topicLabel(topic) {
+      if (topic === "theory") return loc("topicTheory");
+      if (topic === "algo") return loc("topicAlgo");
+      if (topic === "prog") return loc("topicProg");
+      return loc("topicData");
+    }
+
+    function topicClass(topic) {
+      if (topic === "theory") return "q-number theory";
+      if (topic === "algo") return "q-number algo";
+      if (topic === "prog") return "q-number prog";
+      return "q-number data";
+    }
+
+    function setFilter(filter, btn) {
+      currentFilter = filter;
+      document.querySelectorAll(".filter-btn").forEach(function (b) {
+        b.classList.remove("active");
+      });
+      if (btn) btn.classList.add("active");
+      applyFilter();
+    }
+
+    function applyFilter() {
+      quiz.forEach(function (q) {
+        const block = document.getElementById("q" + q.id);
+        if (!block) return;
+        let show = true;
+        if (currentFilter !== "all") show = q.topic === currentFilter;
+        block.style.display = show ? "" : "none";
+      });
+    }
+
+    function updateFilterLabels() {
+      const counts = { theory: 0, algo: 0, prog: 0, data: 0 };
+      quiz.forEach(q => counts[q.topic]++);
+
+      document.getElementById("filterAll").textContent = `${loc("filterAll")} (${quiz.length})`;
+      document.getElementById("filterTheory").textContent = `${loc("filterTheory")} (${counts.theory})`;
+      document.getElementById("filterAlgo").textContent = `${loc("filterAlgo")} (${counts.algo})`;
+      document.getElementById("filterProg").textContent = `${loc("filterProg")} (${counts.prog})`;
+      document.getElementById("filterData").textContent = `${loc("filterData")} (${counts.data})`;
+    }
+
+    function renderAllQuestions() {
+      const container = document.getElementById("quizContainer");
+      container.innerHTML = "";
+
+      quiz.forEach(function (q) {
+        const block = document.createElement("div");
+        block.className = "question-block";
+        block.id = "q" + q.id;
+
+        let optionsHtml = "";
+        q.options.forEach(function (opt, idx) {
+          optionsHtml += `<button class="option" data-q="${q.id}" data-idx="${idx}" data-value="${escapeHtml(opt)}" onclick="handleAnswer(${q.id}, ${idx})">${escapeHtml(opt)}</button>`;
+        });
+
+        block.innerHTML = `
+          <div class="${topicClass(q.topic)}">${escapeHtml(topicLabel(q.topic))}, ${loc("p2Task")} ${q.task}</div>
+
+          <div class="q-part">
+            <span class="q-part-label">${escapeHtml(loc("qLabel1"))}</span>
+            <div class="q-text">${escapeHtml(q.text)}</div>
+          </div>
+
+          <div class="q-info">
+            <span class="q-part-label" style="color:#d8ccff;">${escapeHtml(loc("qLabel2"))}</span>
+            <p style="margin:0;">${escapeHtml(q.info)}</p>
+          </div>
+
+          <div class="q-part">
+            <span class="q-trainer-label">${escapeHtml(loc("qLabel3"))}</span>
+            <div class="options" id="options-${q.id}">${optionsHtml}</div>
+          </div>
+
+          <div id="result-${q.id}"></div>
+        `;
+
+        container.appendChild(block);
+      });
+
+      quiz.forEach(function (q) {
+        if (savedAnswers[q.id] !== undefined) {
+          applyAnswerVisual(q, savedAnswers[q.id]);
+          showResult(q, savedAnswers[q.id]);
+        }
+      });
+
+      updateFilterLabels();
+      updateStats();
+      updateSummary();
+      applyFilter();
+    }
+
+    function handleAnswer(qId, selectedIdx) {
+      const q = quiz.find(function (item) { return item.id === qId; });
+      if (!q || savedAnswers[qId] !== undefined) return;
+
+      const selectedValue = q.options[selectedIdx];
+      savedAnswers[qId] = selectedValue;
+
+      applyAnswerVisual(q, selectedValue);
+      showResult(q, selectedValue);
+      updateStats();
+      updateSummary();
+    }
+
+    function applyAnswerVisual(q, selectedValue) {
+      const optionsBox = document.getElementById("options-" + q.id);
+      if (!optionsBox) return;
+
+      const correctValue = q.options[q.correct];
+      const buttons = optionsBox.querySelectorAll(".option");
+
+      buttons.forEach(function (btn) {
+        btn.disabled = true;
+        const value = btn.dataset.value;
+
+        if (value === correctValue) {
+          btn.classList.add("correct");
+        }
+
+        if (value === selectedValue && selectedValue !== correctValue) {
+          btn.classList.add("wrong");
+        }
+      });
+    }
+
+    function showResult(q, selectedValue) {
+      const resultBox = document.getElementById("result-" + q.id);
+      if (!resultBox) return;
+
+      const correctValue = q.options[q.correct];
+      const isCorrect = selectedValue === correctValue;
+
+      const resultClass = isCorrect ? "correct" : "wrong";
+      const verdictClass = isCorrect ? "correct" : "wrong";
+      const verdictText = isCorrect ? loc("resCorrect") : loc("resWrong");
+
+      resultBox.innerHTML = `
+        <div class="result-block ${resultClass}" role="status" aria-live="polite">
+          <div class="verdict ${verdictClass}">${escapeHtml(verdictText)}</div>
+          <div class="result-row"><strong>${escapeHtml(loc("resAns"))}</strong> ${escapeHtml(correctValue)}</div>
+          <div class="result-row"><strong>${escapeHtml(loc("resExp"))}</strong> ${escapeHtml(q.explanation)}</div>
+          <div class="source-row"><strong>${escapeHtml(loc("resSrc"))}</strong> ${escapeHtml(q.source)}</div>
+        </div>
+      `;
+    }
+
+    function getChecklistProgress() {
+      const total = checklistItemsData.length;
+      let done = 0;
+      checklistItemsData.forEach(function (item) {
+        if (checklistState[item.key]) done++;
+      });
+      return total ? Math.round((done / total) * 100) : 0;
+    }
+
+    function updateStats() {
+      const total = quiz.length;
+      let answered = 0;
+      let correct = 0;
+
+      quiz.forEach(function (q) {
+        const saved = savedAnswers[q.id];
+        if (typeof saved === "string" && q.options.includes(saved)) {
+          answered++;
+          if (saved === q.options[q.correct]) {
+            correct++;
+          }
+        }
+      });
+
+      document.getElementById("answeredCount").textContent = answered + "/" + total;
+      document.getElementById("correctCount").textContent = correct;
+      document.getElementById("checklistProgress").textContent = getChecklistProgress() + "%";
+      document.getElementById("overall").value = Math.round(((answered / total) * 100 + getChecklistProgress()) / 2);
+    }
+
+    function updateSummary() {
+      const summaryBox = document.getElementById("summaryBox");
+      const total = quiz.length;
+      let answered = 0;
+      let correct = 0;
+
+      quiz.forEach(function (q) {
+        const saved = savedAnswers[q.id];
+        if (typeof saved === "string" && q.options.includes(saved)) {
+          answered++;
+          if (saved === q.options[q.correct]) {
+            correct++;
+          }
+        }
+      });
+
+      if (answered < total) {
+        summaryBox.innerHTML = `
+          <div class="summary">
+            <p style="color:#9aa4c8;margin:0;">${escapeHtml(loc("sumDone"))} <strong>${answered}</strong> ${escapeHtml(loc("sumOf"))} ${total}</p>
+            <p style="color:#9aa4c8;margin:8px 0 0 0;">${escapeHtml(loc("sumCorr"))} <strong>${correct}</strong></p>
+            <p style="color:#9aa4c8;margin:8px 0 0 0;font-size:14px;">${escapeHtml(loc("sumFin"))}</p>
+          </div>
+        `;
+        return;
+      }
+
+      const percent = Math.round((correct / total) * 100);
+      let verdict = "";
+
+      if (percent >= 85) {
+        verdict = loc("verExc");
+      } else if (percent >= 60) {
+        verdict = loc("verGood");
+      } else {
+        verdict = loc("verNeed");
+      }
+
+      summaryBox.innerHTML = `
+        <div class="summary">
+          <div class="score">${correct}/${total}</div>
+          <p style="margin:8px 0;">${escapeHtml(verdict)}</p>
+          <p style="color:#9aa4c8;margin:0;">${escapeHtml(loc("sumCorr"))} ${percent}%</p>
+        </div>
+      `;
+    }
+
+    function resetAll() {
+      if (!confirm(loc("confReset"))) return;
+
+      savedAnswers = {};
+      checklistState = {};
+
+      shuffleOptionsOnce();
+      renderAllSections();
+    }
+
+    function renderAllSections() {
+      prepareData();
+      renderStaticSections();
+      renderChecklist();
+      renderPlan();
+      renderAllQuestions();
+    }
+
+    function initChecklist() {
+      const inputs = document.querySelectorAll("#checklistUl input");
+
+      inputs.forEach(function (input) {
+        input.checked = false;
+        updateCheckItem(input);
+
+        input.addEventListener("change", function () {
+          updateCheckItem(input);
+          updateStats();
+        });
+      });
+
+      updateStats();
+    }
+
+    function updateCheckItem(input) {
+      const item = input.closest(".check-item");
+      if (item) item.classList.toggle("done", input.checked);
+    }
+
+    function copyPhone() {
+      const phone = "89202275676";
+      const status = document.getElementById("copyStatus");
+
+      const showCopied = function () {
+        status.textContent = loc("copied");
+        setTimeout(function () {
+          status.textContent = "";
+        }, 2500);
+      };
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(phone)
+          .then(showCopied)
+          .catch(function () {
+            fallbackCopy(phone, showCopied);
+          });
+      } else {
+        fallbackCopy(phone, showCopied);
+      }
+    }
+
+    function fallbackCopy(text, callback) {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+
+      try {
+        document.execCommand("copy");
+        callback();
+      } catch (e) {
+        alert(loc("errCopy") + text);
+      }
+
+      document.body.removeChild(textarea);
+    }
+
+    // ============================================================
+    // TIMER LOGIC
+    // ============================================================
+    let timerTotal = 235 * 60; // Default CS 235 mins
+    let timerRemaining = timerTotal;
+    let timerInterval = null;
+    let timerRunning = false;
+
+    function formatTime(sec) {
+      const h = Math.floor(sec / 3600);
+      const m = Math.floor((sec % 3600) / 60);
+      const s = sec % 60;
+      return [h, m, s].map(function (v) { return String(v).padStart(2, "0"); }).join(":");
+    }
+
+    function updateTimerDisplay() {
+      const display = document.getElementById("timerDisplay");
+      const widget = document.getElementById("timerWidget");
+      display.textContent = formatTime(timerRemaining);
+      widget.classList.toggle("warning", timerRemaining <= 300 && timerRemaining > 60);
+      widget.classList.toggle("danger", timerRemaining <= 60);
+    }
+
+    function updateTimerButton() {
+      const btn = document.getElementById("timerToggle");
+      btn.textContent = timerRunning ? "⏸" : "▶";
+      btn.setAttribute("title", timerRunning ? loc("timerPause") : loc("timerStart"));
+      btn.setAttribute("aria-label", timerRunning ? loc("timerPause") : loc("timerStart"));
+    }
+
+    function stopTimer() {
+      timerRunning = false;
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = null;
+      updateTimerButton();
+    }
+
+    function startTimer() {
+      if (timerRunning || timerRemaining <= 0) return;
+      timerRunning = true;
+      timerInterval = setInterval(function () {
+        if (timerRemaining > 0) {
+          timerRemaining--;
+          updateTimerDisplay();
+        }
+        if (timerRemaining === 0) {
+          stopTimer();
+          alert(loc("timerUp"));
+        }
+      }, 1000);
+      updateTimerButton();
+    }
+
+    function toggleTimer() {
+      if (timerRunning) stopTimer();
+      else startTimer();
+    }
+
+    function resetTimer() {
+      stopTimer();
+      timerRemaining = timerTotal;
+      updateTimerDisplay();
+    }
+
+    function updateTimerLabels() {
+      const preset = document.getElementById("timerPreset");
+      const presets = [
+        { seconds: 235 * 60, key: "timerCS" },
+        { seconds: 60 * 60, key: "timerPractice" }
+      ];
+
+      preset.innerHTML = presets.map(function (p) {
+        return `<option value="${p.seconds}">${escapeHtml(loc(p.key))}</option>`;
+      }).join("");
+
+      const currentValue = parseInt(preset.value, 10);
+      if (!presets.some(p => p.seconds === currentValue)) {
+         preset.value = String(235 * 60);
+         timerTotal = 235 * 60;
+      } else {
+         timerTotal = currentValue;
+      }
+      
+      document.getElementById("timerReset").setAttribute("title", loc("timerReset"));
+      document.getElementById("timerReset").setAttribute("aria-label", loc("timerReset"));
+      updateTimerButton();
+      updateTimerDisplay();
+    }
+
+    function setLang(lang) {
+      currentLang = lang;
+      document.querySelectorAll(".lang-option").forEach(function (sp) {
+        sp.classList.toggle("active", sp.dataset.lang === lang);
+      });
+      applyUIText();
+      renderAllSections();
+      updateTimerLabels();
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      localStorage.removeItem(STORAGE.answers);
+      localStorage.removeItem(STORAGE.checklist);
+      localStorage.removeItem(STORAGE.shuffle);
+      localStorage.removeItem(STORAGE.manual);
+
+      savedAnswers = {};
+      checklistState = {};
+
+      shuffleOptionsOnce();
+      applyUIText();
+      renderAllSections();
+      updateTimerLabels();
+      updateTimerDisplay();
+
+      document.getElementById("langToggle").addEventListener("click", function () {
+        setLang(currentLang === "en" ? "ru" : "en");
+      });
+
+      document.getElementById("timerToggle").addEventListener("click", toggleTimer);
+      document.getElementById("timerReset").addEventListener("click", resetTimer);
+
+      document.getElementById("timerPreset").addEventListener("change", function (e) {
+        timerTotal = parseInt(e.target.value, 10);
+        resetTimer();
+      });
+
+      document.getElementById("checklistUl").addEventListener("change", function (e) {
+        if (e.target.matches("input[type='checkbox']")) {
+          const key = e.target.dataset.key;
+          checklistState[key] = e.target.checked;
+          const li = e.target.closest(".check-item");
+          if (li) li.classList.toggle("done", e.target.checked);
+          updateStats();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
